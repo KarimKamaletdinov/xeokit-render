@@ -1,12 +1,12 @@
-import { Viewer, GLTFLoaderPlugin, Mesh, PhongMaterial, VBOGeometry } from "@xeokit/xeokit-sdk"
+import { Viewer, GLTFLoaderPlugin, Mesh, PhongMaterial, VBOGeometry, SceneModel } from "@xeokit/xeokit-sdk"
 import Stats from 'stats.js'
 import {buildLineGeometry} from '@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildLineGeometry.js'
 
 class Renderer {
-    viewer: Viewer
     stats: Stats
-    loader: GLTFLoaderPlugin
-    model
+    private viewer: Viewer
+    private loader: GLTFLoaderPlugin
+    private model: SceneModel
     constructor(canvasElement: HTMLCanvasElement) {
         this.viewer = new Viewer({
             canvasElement: canvasElement,
@@ -23,10 +23,10 @@ class Renderer {
         this.loader = new GLTFLoaderPlugin(this.viewer)
         this.renderGrid()
     }
-    renderModel(model) {
+    renderModel(model: GlbFile) {
         this.model = this.loader.load({
             gltf: model
-        })
+        }) as any
 
         this.model.on("loaded", () => {
             this.viewer.cameraFlight.jumpTo(this.model)
